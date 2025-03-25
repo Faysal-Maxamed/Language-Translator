@@ -6,7 +6,7 @@ void main() {
     
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LanguageTranslatorPage(),
+      home: LangugageTranslatorPage(),
     ),
   );
 }

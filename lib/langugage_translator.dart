@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
 
-class LanguageTranslatorPage extends StatefulWidget {
-  const LanguageTranslatorPage({super.key});
+class LangugageTranslatorPage extends StatefulWidget {
+  const LangugageTranslatorPage({super.key});
 
   @override
-  State<LanguageTranslatorPage> createState() => _LanguageTranslatorPageState();
+  State<LangugageTranslatorPage> createState() =>
+      _LangugageTranslatorPageState();
 }
 
-class _LanguageTranslatorPageState extends State<LanguageTranslatorPage> {
-  var languages = ["Somali", "English", "Arabic"];
-  var originallanguage = "From";
-  var destinationLanguage = "To";
-  var Output = "";
-  TextEditingController LanguageController = TextEditingController();
-
+class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
+  var langugages = ["Somali", "English", "Arabic"];
+  TextEditingController langugageController = TextEditingController();
+  var langugaeFrom = "From";
+  var langugaeTo = "To";
+  var output = "";
   void translate(String src, String dest, String input) async {
     if (src == "--" || dest == "--") {
       setState(() {
-        Output = "Failed to translate. Please select valid languages.";
+        output = "Failed to translate. Please select valid languages";
       });
       return;
     }
 
     GoogleTranslator translator = GoogleTranslator();
-    var translation = await translator.translate(input, from: src, to: dest);
 
+    var translation = await translator.translate(input, from: src, to: dest);
     setState(() {
-      Output = translation.text;
+      output = translation.text;
     });
 
-    print(Output);
+    print(output);
   }
 
   String getLanguageCode(String language) {
@@ -47,117 +47,182 @@ class _LanguageTranslatorPageState extends State<LanguageTranslatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
       appBar: AppBar(
-        title: Text("Language Translator"),
-        backgroundColor: Colors.teal,
+        elevation: 10,
+        shadowColor: Colors.teal,
+        title: Text("Langugage Translator"),
         centerTitle: true,
+        backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DropdownButton(
-                  value: originallanguage == "From" ? null : originallanguage,
-                  hint: Text(
-                    "Select Language",
-                    style: TextStyle(color: Colors.white),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      DropdownButton(
+                        value: langugaeFrom == "From" ? null : langugaeFrom,
+                        hint: Text(
+                          "Select Language",
+                        ),
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        items: langugages.map((String dropdownItem) {
+                          return DropdownMenuItem(
+                            value: dropdownItem,
+                            child: Text(dropdownItem),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            langugaeFrom = value!;
+                          });
+                        },
+                      ),
+                      Icon(Icons.arrow_right_alt_outlined, color: Colors.black),
+                      DropdownButton(
+                        value: langugaeTo == "To" ? null : langugaeTo,
+                        hint: Text(
+                          "Select Language",
+                          style: TextStyle(),
+                        ),
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        items: langugages.map((String dropdownItem) {
+                          return DropdownMenuItem(
+                            value: dropdownItem,
+                            child: Text(dropdownItem),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            langugaeTo = value!;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  dropdownColor: Colors.white,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  items: languages.map((String dropdownItem) {
-                    return DropdownMenuItem(
-                      value: dropdownItem,
-                      child: Text(dropdownItem),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      originallanguage = value!;
-                    });
-                  },
-                ),
-                Icon(Icons.arrow_right_alt_outlined, color: Colors.white),
-                DropdownButton(
-                  value: destinationLanguage == "To" ? null : destinationLanguage,
-                  hint: Text(
-                    "Select Language",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  dropdownColor: Colors.white,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  items: languages.map((String dropdownItem) {
-                    return DropdownMenuItem(
-                      value: dropdownItem,
-                      child: Text(dropdownItem),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      destinationLanguage = value!;
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 40),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: TextFormField(
-                cursorColor: Colors.white,
-                controller: LanguageController,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                  ),
-                  hintText: "Enter your text....",
-                  errorStyle: TextStyle(color: Colors.red),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: ElevatedButton(
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                height: 250,
+                width: double.infinity,
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 7,
+                      offset: Offset(4, 3),
+                      color: Colors.black.withOpacity(0.15),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: langugageController,
+                      decoration: InputDecoration(
+                        hintText: "Enter Text to translate",
+                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                      ),
+                    ),
+                    Spacer(),
+                    Divider(),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.copy),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.store),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              ElevatedButton(
                 onPressed: () {
-                  if (LanguageController.text.isEmpty) {
-                    setState(() {
-                      Output = "Please enter text to translate.";
-                    });
-                    return;
-                  }
-
-                  translate(
-                    getLanguageCode(originallanguage),
-                    getLanguageCode(destinationLanguage),
-                    LanguageController.text,
-                  );
+                  // if(langugageController.text.isEmpty){
+                  //   output="Please enter text to translate.";
+                  // }
+                  translate(getLanguageCode(langugaeFrom),
+                      getLanguageCode(langugaeTo), langugageController.text);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xff2b3c5a),
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                  minimumSize: Size(double.infinity, 45),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 child: Text(
                   "Translate",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
-            ),
-            SizedBox(height: 40),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                "\n$Output",
-                style: TextStyle(color: Colors.white),
+              SizedBox(
+                height: 30,
               ),
-            )
-          ],
+              Container(
+                height: 250,
+                width: double.infinity,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 7,
+                      offset: Offset(4, 3),
+                      color: Colors.black.withOpacity(0.15),
+                    )
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      output,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    Spacer(),
+                    Divider(),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.favorite_outline),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.share_outlined),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
