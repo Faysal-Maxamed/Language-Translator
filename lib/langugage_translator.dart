@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
 
@@ -10,9 +11,15 @@ class LangugageTranslatorPage extends StatefulWidget {
 }
 
 class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
-  var langugages = ["Somali", "English", "Arabic"];
+  List<Map<String, String>> langugages = [
+    {"name": "Somali", "code": "so", "flag": "SO"},
+    {"name": "English", "code": "en", "flag": "GB"},
+    {"name": "Arabic", "code": "ar", "flag": "SA"},
+    {"name": "Turkish", "code": "tr", "flag": "TR"},
+    {"name": "India", "code": "ID", "flag": "IN"}
+  ];
   TextEditingController langugageController = TextEditingController();
-  var langugaeFrom = "From";
+  String langugaeFrom = "From";
   var langugaeTo = "To";
   var output = "";
   void translate(String src, String dest, String input) async {
@@ -40,6 +47,10 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
       return "en";
     } else if (language == "Arabic") {
       return "ar";
+    } else if (language == "India") {
+      return "hi";
+    } else if (language == "Turkish") {
+      return "tr";
     }
     return "--";
   }
@@ -64,20 +75,33 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
               Card(
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      DropdownButton(
+                      DropdownButton<String>(
                         value: langugaeFrom == "From" ? null : langugaeFrom,
-                        hint: Text(
-                          "Select Language",
-                        ),
+                        hint: Text("Select Language"),
                         icon: Icon(Icons.keyboard_arrow_down),
-                        items: langugages.map((String dropdownItem) {
-                          return DropdownMenuItem(
-                            value: dropdownItem,
-                            child: Text(dropdownItem),
+                        items: langugages.map((luuqadaha) {
+                          return DropdownMenuItem<String>(
+                            value: luuqadaha["name"],
+                            child: Row(
+                              children: [
+                                Text(
+                                  luuqadaha["name"]!,
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                CountryFlag.fromCountryCode(
+                                  shape: Circle(),
+                                  height: 35,
+                                  width: 35,
+                                  luuqadaha["flag"]!,
+                                )
+                              ],
+                            ),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -87,25 +111,35 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
                         },
                       ),
                       Icon(Icons.arrow_right_alt_outlined, color: Colors.black),
-                      DropdownButton(
+                      DropdownButton<String>(
                         value: langugaeTo == "To" ? null : langugaeTo,
-                        hint: Text(
-                          "Select Language",
-                          style: TextStyle(),
-                        ),
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        items: langugages.map((String dropdownItem) {
+                        hint: Text("Select Language"),
+                        items: langugages.map((lang) {
                           return DropdownMenuItem(
-                            value: dropdownItem,
-                            child: Text(dropdownItem),
-                          );
+                              value: lang["name"],
+                              child: Row(
+                                children: [
+                                  Text(lang["name"]!),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  CountryFlag.fromCountryCode(
+                                    lang["flag"]!,
+                                    height: 35,
+                                    width: 35,
+                                    shape: Circle(),
+                                  )
+                                ],
+                              ));
                         }).toList(),
                         onChanged: (value) {
-                          setState(() {
-                            langugaeTo = value!;
-                          });
+                          setState(
+                            () {
+                              langugaeTo = value!;
+                            },
+                          );
                         },
-                      ),
+                      )
                     ],
                   ),
                 ),
@@ -160,9 +194,6 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // if(langugageController.text.isEmpty){
-                  //   output="Please enter text to translate.";
-                  // }
                   translate(getLanguageCode(langugaeFrom),
                       getLanguageCode(langugaeTo), langugageController.text);
                 },
