@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:translator/translator.dart';
@@ -53,6 +54,16 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
       return "tr";
     }
     return "--";
+  }
+
+  void CopyToClipboard(String text) {
+    FlutterClipboard.copy(text).then((_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Copied"),
+        ),
+      );
+    });
   }
 
   @override
@@ -177,7 +188,8 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () =>
+                              CopyToClipboard(langugageController.text),
                           icon: Icon(Icons.copy),
                         ),
                         IconButton(
@@ -239,6 +251,10 @@ class _LangugageTranslatorPageState extends State<LangugageTranslatorPage> {
                     Divider(),
                     Row(
                       children: [
+                        IconButton(
+                          onPressed: () => CopyToClipboard(output),
+                          icon: Icon(Icons.copy),
+                        ),
                         IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.favorite_outline),
